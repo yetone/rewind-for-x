@@ -45,7 +45,7 @@ const paint = (lines, bg) => painter.evaluate(([lines, bg]) => {
 }, [lines, bg]);
 const pics = {
   en: await paint(['Hello Rewind', 'Meeting at 3pm'], '#fff'),
-  zh: await paint(['图片里的文字', '明天见'], '#f5f0e0'),
+  zh: await paint(['图片里的文字', '明天见', '11月9日 3点'], '#f5f0e0'),
   none: await paint([], '#9bd'),
 };
 await painter.close();
@@ -114,6 +114,10 @@ console.log('ok  downloads with progress, reads every image');
 assert.deepEqual(await find('hello rewind'), ['Ann']);
 assert.deepEqual(await find('图片里'), ['Ben']);
 assert.deepEqual(await find('明天见'), ['Ben']);
+// Tesseract puts a space between Chinese and digits ("11 月 9 日"), and a
+// phrase can run over a line break; neither stops a match.
+assert.deepEqual(await find('11月9日'), ['Ben']);
+assert.deepEqual(await find('文字明天'), ['Ben']);
 await page.locator('#x-rewind .search').fill('图片里');
 await page.mouse.move(10, 790);
 await page.waitForTimeout(300);

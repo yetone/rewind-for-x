@@ -518,16 +518,21 @@
   let pages = 1;
   let shown = [];
 
+  // Whether there is a space between Chinese or Japanese and a word or a
+  // number varies by writer, and text read from images always has one; it
+  // shouldn't decide whether a search matches.
+  const CJK = '\\u2e80-\\u9fff\\uac00-\\ud7af\\uf900-\\ufaff\\uff00-\\uffef';
+  const NEAR_CJK = new RegExp(`(?<=[${CJK}])\\s+|\\s+(?=[${CJK}])`, 'g');
+  const norm = (s) => s.toLowerCase().replace(NEAR_CJK, '');
+
   function render() {
-    const q = search.value.trim().toLowerCase();
+    const q = norm(search.value.trim());
     shown = sorted();
     if (filter !== 'all') shown = shown.filter(FILTERS.find(([f]) => f === filter)[2]);
     if (q) {
       shown = shown.filter((i) =>
-        `${i.name}\n${i.handle}\n${i.text}\n${i.context}\n${i.quote ? `${i.quote.name}\n${i.quote.text}` : ''}${
-          ocrOn ? i.media.map((src) => `\n${ocr[src] || ''}`).join('') : ''}`
-          .toLowerCase()
-          .includes(q)
+        norm(`${i.name}\n${i.handle}\n${i.text}\n${i.context}\n${i.quote ? `${i.quote.name}\n${i.quote.text}` : ''}${
+          ocrOn ? i.media.map((src) => `\n${ocr[src] || ''}`).join('') : ''}`).includes(q)
       );
     }
     count.textContent = shown.length ? String(shown.length) : '';
