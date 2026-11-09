@@ -1,41 +1,53 @@
 # Rewind for X 推文回看
 
-X 的首页推荐经常一刷新就把刚才看到的好帖子顶掉。这个 Chrome 扩展会默默记下你在首页**看到过**的每条推文，让你随时回看。
+**官网：<https://rewindforx.com>**
 
-- 推文在屏幕上露出一半以上就算"看过"，记下作者、正文、图片、引用推文、转帖人和链接
-- 只记录首页时间线（推荐 / 关注），广告不记，推文详情页、个人主页也不记
-- 点右下角的按钮（叠在 X 的 Grok / 聊天按钮上方；或工具栏图标、`Alt+Shift+R`）打开抽屉：最新的在最上面，按浏览时段分组，可以搜索
-- 点推文会在新标签页打开，不会让当前首页再刷新一次
-- 数据只存在本机（`chrome.storage.local`），最多保留 3000 条，可一键清空
+X 的首页推荐一刷新，刚才看到的好帖子就找不回来了。这个 Chrome 扩展会默默记下你在首页**看到过**的每条推文，随时可以回看。
+
+- **只记看过的**：推文在屏幕上露出一半以上才算，记下作者、正文、图片、引用、转帖人和链接
+- **只记首页**：推荐和关注时间线；广告、推文详情页、个人主页都不记
+- **随手打开**：右下角的按钮（在 X 的 Grok / 聊天按钮上方）、工具栏图标或 `Alt+Shift+R`。最新的在最上面，按浏览时段分组
+- **搜索和筛选**：关键词搜索，按图片、视频、引用、转帖筛选；中文前后有没有空格都能搜到
+- **搜图中文字**：打开后，图片里的文字也能搜到。识别在本机完成，第一次使用时下载几 MB 的识别数据
+- **不打扰首页**：点推文在新标签页打开，首页不会再刷新一次
+- **手机布局**：窄屏和触屏下，抽屉铺满屏幕，按钮避开底部标签栏和发帖按钮
+- **数据只在本机**：存在 `chrome.storage.local`，最多 3000 条，可一键清空
 
 非 X 官方产品，与 X Corp. 无关。
 
 ## 安装
 
 1. 打开 `chrome://extensions`，打开右上角「开发者模式」
-2. 「加载已解压的扩展程序」→ 选择本目录
+2. 「加载已解压的扩展程序」，选择本目录
 3. 打开或刷新 x.com/home
 
 ## 测试
 
+需要 Playwright 和 Chromium。测试用模拟 X 页面结构的页面，跑真实的扩展。
+
 ```
-node test/e2e.mjs   # 需要 Playwright + Chromium
+node test/e2e.mjs     # 记录、刷新后保留、忽略广告和非首页、跳过翻译插件的译文、抽屉、搜索、筛选、清空、深色主题
+node test/mobile.mjs  # 手机布局：按钮位置、全屏抽屉、触屏尺寸
+node test/ocr.mjs     # 搜图中文字：下载进度、识别、搜索、开关（要联网下载识别数据）
 ```
 
-用模拟 X 页面结构的页面跑真实扩展：记录、刷新后保留、忽略广告和非首页、跳过翻译扩展插入的译文、按钮避开 X 的 Grok/聊天按钮、抽屉列表、搜索、点外面关闭、清空、深色主题。
+## 目录
 
-`tools/icons.py` 生成 `icons/`。
+- `background.js`：工具栏图标；在后台逐张识别图片
+- `content.js`：在 x.com 上记录推文，以及抽屉界面
+- `ocr/`：图片文字识别，[Tesseract.js](https://github.com/naptha/tesseract.js) 7（Apache-2.0）跑在 offscreen 页面里。识别数据从 jsDelivr 下载，存在 IndexedDB
+- `tools/icons.py`：生成 `icons/`
 
 ## 上架 Chrome 网上应用店
 
-- `tools/pack.sh`：打包 `dist/rewind-for-x-<版本>.zip`，只含 manifest、两个脚本、`_locales/` 和 `icons/`
-- `node tools/store-assets.mjs`：重新生成 `store/screenshots/`（1280×800，中英文 × 浅色 / 深色 / 搜索）和 `store/promo/`（440×280 小宣传图、1400×560 大宣传图），帖子全是虚构的
-- `store/listing.md`：商店描述（中英文）和隐私表单要填的每一段文字
-- `store/privacy-policy.html`：隐私政策页面，官网上的副本在 https://rewindforx.com/privacy/
+- `tools/pack.sh`：打包成 `dist/rewind-for-x-<版本>.zip`，只含扩展运行需要的文件
+- `node tools/store-assets.mjs`：重新生成 `store/screenshots/`（1280×800，中英文 × 浅色 / 深色 / 搜索）和 `store/promo/`（440×280、1400×560 宣传图），图里的帖子都是虚构的
+- `store/listing.md`：商店描述（中英文），以及隐私表单要填的每一段文字
+- `store/privacy-policy.html`：隐私政策，线上版本在 <https://rewindforx.com/privacy/>
 
 ## 官网
 
-https://rewindforx.com ，源文件在 `site/`（英文首页、`zh/` 中文页、`privacy/` 隐私政策），由 Cloudflare Workers 静态资源托管，`site-worker/index.js` 把 www 跳到裸域。部署：
+<https://rewindforx.com>，源文件在 `site/`：英文首页、`zh/` 中文页、`privacy/` 隐私政策。托管在 Cloudflare Workers 静态资源上，`site-worker/index.js` 把 www 跳转到裸域。部署：
 
 ```
 npx wrangler deploy
