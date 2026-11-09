@@ -20,6 +20,7 @@ X's home timeline refreshes often, and a good post you were halfway through can 
 • A post counts as seen once at least half of it has been on screen. The author, text, images, quoted post, who reposted it and the link are kept.
 • Open the drawer with the button above X's own floating buttons, the toolbar icon, or Alt+Shift+R. Posts are listed newest first and grouped by when you saw them.
 • Search by author, @handle or any word in the post.
+• Turn on Search text in images to find posts by the words in their screenshots and memes too. The text is read on your device; the first time, a few MB of recognition data for your language is downloaded.
 • Click a post to open it on X in a new tab.
 • Follows X's light, dim and dark themes.
 • Ads are skipped. Only the Home timeline is recorded; profiles, threads and search are not.
@@ -37,6 +38,7 @@ X 的首页推荐刷新很频繁，看到一半的好帖子一转眼就被新内
 • 推文在屏幕上露出一半以上就算"看过"，记下作者、正文、图片、引用推文、转帖人和链接。
 • 点 X 悬浮按钮上方的回看按钮、工具栏图标或按 Alt+Shift+R 打开侧栏。按时间倒序列出，并按看到的时间分组。
 • 可以按作者、@用户名或正文里的任意词搜索。
+• 打开“搜索图中文字”，还能按截图、梗图里的文字找到推文。文字在本机识别；第一次使用会下载几 MB 对应语言的识别数据。
 • 点一条推文，在新标签页里打开原帖。
 • 跟随 X 的浅色、暗蓝和纯黑主题。
 • 自动跳过广告。只记录首页推荐，个人主页、对话串和搜索页不记录。
