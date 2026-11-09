@@ -42,7 +42,7 @@
 <main>
   <header>
     <h1>Rewind for X privacy policy</h1>
-    <div class="date">Effective 9 November 2026 · 生效日期 2026 年 11 月 9 日</div>
+    <div class="date">Effective 10 November 2026 · 生效日期 2026 年 11 月 10 日</div>
     <nav><a href="#en">English</a><a href="#zh">中文</a></nav>
   </header>
 
@@ -59,21 +59,29 @@
       <li>when the post was published and when you saw it</li>
     </ul>
     <p>It records nothing from other pages, and skips ads.</p>
+    <p>If you turn on <strong>Search text in images</strong>, it also saves the text it reads in those posts' images.</p>
 
     <h3>Where it is stored</h3>
     <p>Only on your device, in your browser's extension storage (<code>chrome.storage.local</code>). The newest 3,000 posts are kept and older ones are deleted.</p>
 
     <h3>What it does not do</h3>
     <ul>
-      <li>It does not send any data to the developer or to any server. It makes no network requests of its own.</li>
+      <li>It does not send any data to the developer or to any server.</li>
       <li>It does not sell, share or transfer data to anyone.</li>
       <li>It has no accounts, analytics, tracking or advertising.</li>
       <li>It does not read your messages, passwords, cookies or browsing history.</li>
     </ul>
     <p>Images in the list load from X's servers, the same way they do on x.com.</p>
 
+    <h3>Search text in images</h3>
+    <p>This feature is off until you turn it on in the drawer. When it is on:</p>
+    <ul>
+      <li>The first time, the extension downloads text recognition data for your browser's language (a few MB) from the jsDelivr CDN (<code>cdn.jsdelivr.net</code>) and keeps it on your device. The request contains only the language name, nothing about you or your posts.</li>
+      <li>It downloads the images of saved posts from X's servers and reads the text in them on your device. Images and their text are not sent anywhere.</li>
+    </ul>
+
     <h3>Deleting your data</h3>
-    <p>Click the trash button in the drawer, then click again to confirm. Removing the extension also deletes everything it stored.</p>
+    <p>Click the trash button in the drawer, then click again to confirm. With Search text in images on, the text read from those posts' images is deleted with them. Removing the extension also deletes everything it stored, including the downloaded recognition data.</p>
 
     <h3>Changes</h3>
     <p>If this policy changes, the new version will be posted on this page with a new effective date.</p>
@@ -94,21 +102,29 @@
       <li>推文的发布时间和你看到它的时间</li>
     </ul>
     <p>其他页面的内容一律不记录，广告也会跳过。</p>
+    <p>如果你打开了<strong>搜索图中文字</strong>，还会保存从这些推文图片里识别出的文字。</p>
 
     <h3>保存位置</h3>
     <p>只保存在你自己的设备上，即浏览器的扩展存储（<code>chrome.storage.local</code>）。最多保留最近 3000 条，更早的会被自动删除。</p>
 
     <h3>不会做的事</h3>
     <ul>
-      <li>不会把任何数据发送给开发者或任何服务器，扩展本身不发起任何网络请求。</li>
+      <li>不会把任何数据发送给开发者或任何服务器。</li>
       <li>不会出售、分享或转让任何数据。</li>
       <li>没有账号、统计、追踪或广告。</li>
       <li>不读取你的私信、密码、Cookie 或浏览记录。</li>
     </ul>
     <p>列表中的图片从 X 的服务器加载，与在 x.com 上浏览时相同。</p>
 
+    <h3>搜索图中文字</h3>
+    <p>这个功能默认关闭，需要你在侧栏里手动打开。打开后：</p>
+    <ul>
+      <li>第一次会从 jsDelivr CDN（<code>cdn.jsdelivr.net</code>）下载与浏览器语言对应的文字识别数据（几 MB），保存在本机。请求里只有语言名称，不含你的任何信息或推文内容。</li>
+      <li>扩展会从 X 的服务器下载已保存推文的图片，在你的设备上识别其中的文字。图片和识别出的文字都不会发送到任何地方。</li>
+    </ul>
+
     <h3>删除数据</h3>
-    <p>在侧栏点击垃圾桶按钮，再点一次确认即可清空。卸载扩展也会删除它保存的全部数据。</p>
+    <p>在侧栏点击垃圾桶按钮，再点一次确认即可清空。打开了搜索图中文字时，这些推文图片里识别出的文字也会一并删除。卸载扩展也会删除它保存的全部数据，包括下载的识别数据。</p>
 
     <h3>政策变更</h3>
     <p>如本政策有变，新版本会发布在本页面，并更新生效日期。</p>
