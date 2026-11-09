@@ -89,5 +89,5 @@ Then tick all three certifications:
 ### Privacy policy URL
 
 ```
-https://yetone.github.io/rewind-for-x/store/privacy-policy.html
+https://rewindforx.com/privacy/
 ```

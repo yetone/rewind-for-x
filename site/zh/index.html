@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rewind for X 推文回看</title>
+<meta name="description" content="一个 Chrome 扩展：记下你在 X 首页看到过的推文，被刷新顶掉的帖子也能找回来。数据只存在本机。">
+<link rel="canonical" href="https://rewindforx.com/zh/">
+<link rel="alternate" hreflang="en" href="https://rewindforx.com/">
+<link rel="alternate" hreflang="zh-CN" href="https://rewindforx.com/zh/">
+<meta property="og:title" content="Rewind for X 推文回看">
+<meta property="og:description" content="刚被刷新顶掉的推文，随时找回来。">
+<meta property="og:image" content="https://rewindforx.com/img/og-zh.png">
+<meta property="og:url" content="https://rewindforx.com/zh/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/zh/"><img src="/img/icon.png" alt="">Rewind for X</a>
+    <nav><a class="hide-sm" href="#install">安装</a><a href="/privacy/#zh">隐私</a><a href="/" lang="en">English</a></nav>
+  </header>
+
+  <section class="hero">
+    <img class="icon" src="/img/icon.png" alt="" width="88" height="88">
+    <h1>刚被刷掉的推文，随时找回来</h1>
+    <p class="lede">X 首页一刷新，看到一半的好帖子就被顶没了。Rewind for X 会记下你看到过的每条推文，就存在你的浏览器里。</p>
+    <div class="cta">
+      <a class="btn primary" href="#install">添加到 Chrome</a>
+      <a class="btn ghost" href="https://github.com/yetone/rewind-for-x"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+    </div>
+  </section>
+
+  <picture class="shot">
+    <source srcset="/img/zh_CN-2-dark.png" media="(prefers-color-scheme: dark)">
+    <img src="/img/zh_CN-1-light.png" alt="X 首页旁打开的“最近看过”侧栏" width="1280" height="800">
+  </picture>
+
+  <section class="features">
+    <div><h3>边刷边记</h3><p>推文露出一半以上就算看过，记下作者、正文、图片、引用推文和链接。广告不记。</p></div>
+    <div><h3>一键打开</h3><p>点 X 悬浮按钮上方的回看按钮、工具栏图标，或按 <kbd>Alt</kbd>&#8239;<kbd>Shift</kbd>&#8239;<kbd>R</kbd>。最新的在最上面，按看到的时间分组。</p></div>
+    <div><h3>新标签页打开</h3><p>点推文在新标签页里看原帖，首页不会再刷新一次。</p></div>
+    <div><h3>什么都能搜</h3><p>按作者、@用户名、正文里的任意词，甚至图片里的文字来找。</p></div>
+    <div><h3>按类型筛选</h3><p>只看带图片、视频、引用或转帖的推文。</p></div>
+    <div><h3>和 X 一个样</h3><p>跟随 X 的浅色、暗蓝和纯黑主题，窄窗口里也合身。</p></div>
+  </section>
+
+  <section class="split">
+    <div>
+      <h2>记录只留在你的设备上</h2>
+      <p>推文保存在浏览器的扩展本地存储里。没有账号，没有统计，不上传任何东西。</p>
+      <p>最多保留最近 3000 条，点两下即可全部清空。</p>
+      <p><a href="/privacy/#zh">查看隐私政策</a></p>
+    </div>
+    <picture class="shot">
+      <img src="/img/zh_CN-3-search.png" alt="在侧栏里搜索" width="1280" height="800" loading="lazy">
+    </picture>
+  </section>
+
+  <section class="install" id="install">
+    <h2>安装</h2>
+    <ol>
+      <li><a href="https://github.com/yetone/rewind-for-x/archive/refs/heads/main.zip"><strong>下载扩展</strong></a>并解压。</li>
+      <li>打开 <code>chrome://extensions</code>，打开右上角的<strong>开发者模式</strong>。</li>
+      <li>点<strong>加载已解压的扩展程序</strong>，选择解压出来的文件夹。</li>
+      <li>打开或刷新 <code>x.com/home</code>。</li>
+    </ol>
+  </section>
+
+  <footer>
+    <span>Rewind for X 是独立开发的项目，与 X Corp. 无关。</span>
+    <nav><a href="/privacy/#zh">隐私</a><a href="https://github.com/yetone/rewind-for-x">GitHub</a><a href="/" lang="en">English</a></nav>
+  </footer>
+</div>
+</body>
+</html>

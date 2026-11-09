@@ -31,7 +31,15 @@ node test/e2e.mjs   # 需要 Playwright + Chromium
 - `tools/pack.sh`：打包 `dist/rewind-for-x-<版本>.zip`，只含 manifest、两个脚本、`_locales/` 和 `icons/`
 - `node tools/store-assets.mjs`：重新生成 `store/screenshots/`（1280×800，中英文 × 浅色 / 深色 / 搜索）和 `store/promo/`（440×280 小宣传图、1400×560 大宣传图），帖子全是虚构的
 - `store/listing.md`：商店描述（中英文）和隐私表单要填的每一段文字
-- `store/privacy-policy.html`：隐私政策页面，由 GitHub Pages 发布在 https://yetone.github.io/rewind-for-x/store/privacy-policy.html
+- `store/privacy-policy.html`：隐私政策页面，官网上的副本在 https://rewindforx.com/privacy/
+
+## 官网
+
+https://rewindforx.com ，源文件在 `site/`（英文首页、`zh/` 中文页、`privacy/` 隐私政策），由 Cloudflare Workers 静态资源托管，`site-worker/index.js` 把 www 跳到裸域。部署：
+
+```
+npx wrangler deploy
+```
 
 ## License
 

@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rewind for X Privacy</title>
+<link rel="icon" href="/favicon.png">
+<style>
+  /* One reading column, English then Chinese, set like a plain legal notice. */
+  :root {
+    --bg: #ffffff; --fg: #0f1419; --muted: #536471; --line: #e3e8eb; --accent: #1a73c7; --chip: #f2f5f7;
+    --body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+    --bg: #0b0d10; --fg: #e7e9ea; --muted: #8b949c; --line: #262b30; --accent: #6cb2f5; --chip: #171b1f; color-scheme: dark;
+  } }
+  :root[data-theme="dark"] {
+    --bg: #0b0d10; --fg: #e7e9ea; --muted: #8b949c; --line: #262b30; --accent: #6cb2f5; --chip: #171b1f; color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.65 var(--body); -webkit-font-smoothing: antialiased; }
+  main { max-width: 680px; margin: 0 auto; padding-block: 56px 80px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; flex-direction: column; gap: 56px; }
+  header { display: flex; flex-direction: column; gap: 6px; }
+  h1 { margin: 0; font-size: 32px; line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; }
+  .date { color: var(--muted); font-size: 14px; font-variant-numeric: tabular-nums; }
+  nav { display: flex; gap: 8px; margin-top: 12px; }
+  nav a { font-size: 14px; padding: 4px 12px; border-radius: 999px; background: var(--chip); color: var(--fg); text-decoration: none; }
+  nav a:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  section { display: flex; flex-direction: column; gap: 4px; }
+  section + section { border-top: 1px solid var(--line); padding-top: 48px; }
+  h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.3; text-wrap: balance; }
+  h3 { margin: 20px 0 0; font-size: 16px; }
+  p, ul { margin: 0; }
+  ul { padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+  code { font-size: .9em; padding: 1px 5px; border-radius: 4px; background: var(--chip); }
+  a { color: var(--accent); }
+  .note { color: var(--muted); font-size: 14px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Rewind for X privacy policy</h1>
+    <div class="date">Effective 10 November 2026 · 生效日期 2026 年 11 月 10 日</div>
+    <nav><a href="/">Rewind for X</a><a href="#en">English</a><a href="#zh">中文</a></nav>
+  </header>
+
+  <section id="en" lang="en">
+    <h2>English</h2>
+    <p>Rewind for X is a Chrome extension that keeps a list of the posts you have seen on your X (x.com) home timeline, so you can find posts the timeline replaced. This policy explains what it stores and where.</p>
+
+    <h3>What it stores</h3>
+    <p>For each post that appears on your Home timeline, the extension saves:</p>
+    <ul>
+      <li>the author's display name, @handle and profile picture URL</li>
+      <li>the post's text, image URLs and link</li>
+      <li>the quoted post's author and text, and who reposted it, if shown</li>
+      <li>when the post was published and when you saw it</li>
+    </ul>
+    <p>It records nothing from other pages, and skips ads.</p>
+    <p>If you turn on <strong>Search text in images</strong>, it also saves the text it reads in those posts' images.</p>
+
+    <h3>Where it is stored</h3>
+    <p>Only on your device, in your browser's extension storage (<code>chrome.storage.local</code>). The newest 3,000 posts are kept and older ones are deleted.</p>
+
+    <h3>What it does not do</h3>
+    <ul>
+      <li>It does not send any data to the developer or to any server.</li>
+      <li>It does not sell, share or transfer data to anyone.</li>
+      <li>It has no accounts, analytics, tracking or advertising.</li>
+      <li>It does not read your messages, passwords, cookies or browsing history.</li>
+    </ul>
+    <p>Images in the list load from X's servers, the same way they do on x.com.</p>
+
+    <h3>Search text in images</h3>
+    <p>This feature is off until you turn it on in the drawer. When it is on:</p>
+    <ul>
+      <li>The first time, the extension downloads text recognition data for your browser's language (a few MB) from the jsDelivr CDN (<code>cdn.jsdelivr.net</code>) and keeps it on your device. The request contains only the language name, nothing about you or your posts.</li>
+      <li>It downloads the images of saved posts from X's servers and reads the text in them on your device. Images and their text are not sent anywhere.</li>
+    </ul>
+
+    <h3>Deleting your data</h3>
+    <p>Click the trash button in the drawer, then click again to confirm. With Search text in images on, the text read from those posts' images is deleted with them. Removing the extension also deletes everything it stored, including the downloaded recognition data.</p>
+
+    <h3>Changes</h3>
+    <p>If this policy changes, the new version will be posted on this page with a new effective date.</p>
+
+    <p class="note">Rewind for X is an independent project. It is not made, endorsed or sponsored by X Corp. Questions can be sent through the support link on the extension's Chrome Web Store page.</p>
+  </section>
+
+  <section id="zh" lang="zh-CN">
+    <h2>中文</h2>
+    <p>Rewind for X 是一个 Chrome 扩展，会记下你在 X（x.com）首页推荐里看到过的推文，方便你找回被新内容顶掉的帖子。本政策说明它保存什么、保存在哪里。</p>
+
+    <h3>保存的内容</h3>
+    <p>对于在首页推荐中出现过的每条推文，扩展会保存：</p>
+    <ul>
+      <li>作者的显示名称、@用户名和头像链接</li>
+      <li>推文正文、图片链接和推文链接</li>
+      <li>引用推文的作者和正文，以及转帖人（如有显示）</li>
+      <li>推文的发布时间和你看到它的时间</li>
+    </ul>
+    <p>其他页面的内容一律不记录，广告也会跳过。</p>
+    <p>如果你打开了<strong>搜索图中文字</strong>，还会保存从这些推文图片里识别出的文字。</p>
+
+    <h3>保存位置</h3>
+    <p>只保存在你自己的设备上，即浏览器的扩展存储（<code>chrome.storage.local</code>）。最多保留最近 3000 条，更早的会被自动删除。</p>
+
+    <h3>不会做的事</h3>
+    <ul>
+      <li>不会把任何数据发送给开发者或任何服务器。</li>
+      <li>不会出售、分享或转让任何数据。</li>
+      <li>没有账号、统计、追踪或广告。</li>
+      <li>不读取你的私信、密码、Cookie 或浏览记录。</li>
+    </ul>
+    <p>列表中的图片从 X 的服务器加载，与在 x.com 上浏览时相同。</p>
+
+    <h3>搜索图中文字</h3>
+    <p>这个功能默认关闭，需要你在侧栏里手动打开。打开后：</p>
+    <ul>
+      <li>第一次会从 jsDelivr CDN（<code>cdn.jsdelivr.net</code>）下载与浏览器语言对应的文字识别数据（几 MB），保存在本机。请求里只有语言名称，不含你的任何信息或推文内容。</li>
+      <li>扩展会从 X 的服务器下载已保存推文的图片，在你的设备上识别其中的文字。图片和识别出的文字都不会发送到任何地方。</li>
+    </ul>
+
+    <h3>删除数据</h3>
+    <p>在侧栏点击垃圾桶按钮，再点一次确认即可清空。打开了搜索图中文字时，这些推文图片里识别出的文字也会一并删除。卸载扩展也会删除它保存的全部数据，包括下载的识别数据。</p>
+
+    <h3>政策变更</h3>
+    <p>如本政策有变，新版本会发布在本页面，并更新生效日期。</p>
+
+    <p class="note">Rewind for X 是独立开发的项目，并非 X Corp. 的官方产品，也未获其认可或赞助。如有问题，可通过 Chrome 网上应用店页面上的支持链接联系。</p>
+  </section>
+</main>
+</body>
+</html>
