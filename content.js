@@ -6,7 +6,7 @@
   const SESSION_GAP = 10 * 60 * 1000; // a gap this long starts a new divider
   const TWEET = 'article[data-testid="tweet"]';
 
-  const t = (k) => chrome.i18n.getMessage(k) || k;
+  const t = (k, ...subs) => chrome.i18n.getMessage(k, subs.map(String)) || k;
   const alive = () => {
     try { return !!chrome.runtime?.id; } catch { return false; }
   };
@@ -202,6 +202,7 @@
   const ICON_TRASH = svg('M9 3h6l1 2h4v2H4V5h4l1-2Zm-3 6h2l.8 10h6.4L16 9h2l-.95 12H6.95L6 9Zm4 1.5h1.5V17H10v-6.5Zm2.5 0H14V17h-1.5v-6.5Z');
   const ICON_REPOST = 'M4.5 3.88 8.93 8.02 7.57 9.48 5.5 7.55V16c0 1.1.9 2 2 2H13v2H7.5c-2.21 0-4-1.79-4-4V7.55L1.43 9.48.07 8.02 4.5 3.88ZM16.5 6H11V4h5.5c2.21 0 4 1.79 4 4v8.45l2.07-1.93 1.36 1.46-4.43 4.14-4.43-4.14 1.36-1.46 2.07 1.93V8c0-1.1-.9-2-2-2Z';
   const ICON_PLAY = svg('M8 5.14v13.72L19 12 8 5.14Z');
+  const ICON_OCR = svg('M3.5 3.5h5v2h-3v3h-2v-5Zm12 0h5v5h-2v-3h-3v-2Zm-12 12h2v3h3v2h-5v-5Zm15 0h2v5h-5v-2h3v-3ZM8 8h8v2h-3v6h-2v-6H8V8Z', 'glyph');
 
   const CSS = `
     :host { all: initial; }
@@ -281,13 +282,30 @@
     .field { position: relative; }
     .field .lead { position: absolute; left: 16px; top: 12px; width: 18px; height: 18px; color: var(--muted); pointer-events: none; }
     .search {
-      width: 100%; height: 42px; padding: 0 16px 0 44px; border-radius: 999px;
+      width: 100%; height: 42px; padding: 0 48px 0 44px; border-radius: 999px;
       border: 1px solid transparent; background: var(--field); color: var(--fg); font: inherit; outline: none;
     }
     .search:focus { border-color: var(--accent); background: var(--bg); }
     .search:focus + .lead { color: var(--accent); }
     .search::placeholder { color: var(--muted); }
     .search::-webkit-search-cancel-button { display: none; }
+    /* Text in images: a toggle at the end of the search box. While the
+       language data downloads, a ring around it fills up. */
+    .ocr {
+      position: absolute; right: 3px; top: 3px; width: 36px; height: 36px; border-radius: 999px;
+      display: grid; place-items: center; color: var(--muted); transition: background-color .2s ease, color .2s ease;
+    }
+    .ocr svg { grid-area: 1 / 1; }
+    .ocr .glyph { width: 18px; height: 18px; }
+    .ocr[aria-pressed="true"] { color: var(--accent); }
+    .ocr.error { color: var(--danger); }
+    .ocr:active { background: var(--press); }
+    .ring { width: 32px; height: 32px; transform: rotate(-90deg); opacity: 0; transition: opacity .2s ease; }
+    .ring circle { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+    .ring .track { opacity: .2; }
+    .ring .bar { stroke-dasharray: 100; transition: stroke-dashoffset .2s linear; }
+    .ocr.loading .ring { opacity: 1; }
+    @media (hover: hover) and (pointer: fine) { .ocr:hover { background: var(--hover); } }
     .chips { display: flex; gap: 8px; margin: 12px -16px 0; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
     .chips::-webkit-scrollbar { display: none; }
     .chip {
@@ -358,9 +376,10 @@
       .icon { height: 44px; min-width: 44px; }
       .search { height: 44px; font-size: 16px; }
       .field .lead { top: 13px; }
+      .ocr { top: 4px; }
       .chip { height: 36px; line-height: 34px; }
       .fab { -webkit-tap-highlight-color: transparent; }
-      .card, .chip, .icon, .reset { -webkit-tap-highlight-color: transparent; }
+      .card, .chip, .icon, .reset, .ocr { -webkit-tap-highlight-color: transparent; }
     }
     .note .reset {
       margin-top: 16px; height: 36px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--edge);
@@ -394,6 +413,7 @@
         </div>
         <div class="field">
           <input class="search" type="search" placeholder="${t('search')}" autocomplete="off" spellcheck="false">${ICON_SEARCH}
+          <button class="ocr" aria-pressed="false" aria-label="${t('ocr')}" title="${t('ocr')}">${ICON_OCR}<svg class="ring" viewBox="0 0 32 32" aria-hidden="true"><circle class="track" cx="16" cy="16" r="15"/><circle class="bar" cx="16" cy="16" r="15" pathLength="100" stroke-dashoffset="100"/></svg></button>
         </div>
         <div class="chips" role="group" aria-label="${t('filter')}">${FILTERS.map(([id, key]) =>
           `<button class="chip" data-f="${id}" aria-pressed="false">${t(key)}</button>`).join('')}</div>
@@ -408,12 +428,31 @@
   const count = $('.count');
   const clearBtn = $('.clear');
   const chips = $('.chips');
+  const ocrBtn = $('.ocr');
+  const ring = $('.ring .bar');
   let filter = 'all';
   function setFilter(id, save) {
     if (!FILTERS.some(([f]) => f === id)) id = 'all';
     filter = id;
     for (const c of chips.children) c.setAttribute('aria-pressed', String(c.dataset.f === id));
     if (save && alive()) chrome.storage.local.set({ filter: id }).catch(() => {});
+  }
+
+  // Text read from images (src -> text), and how the reading is going.
+  let ocr = {};
+  let ocrOn = false;
+  let ocrState = null;
+  function showOcr() {
+    const phase = ocrOn ? ocrState?.phase : '';
+    const loading = phase === 'download';
+    ocrBtn.setAttribute('aria-pressed', String(ocrOn));
+    ocrBtn.classList.toggle('loading', loading);
+    ocrBtn.classList.toggle('error', phase === 'error');
+    if (loading) ring.setAttribute('stroke-dashoffset', String(100 - Math.round(ocrState.progress * 100)));
+    ocrBtn.title = loading ? t('ocrDownloading', Math.round(ocrState.progress * 100))
+      : phase === 'working' && ocrState.left ? t('ocrWorking', ocrState.left)
+      : phase === 'error' ? t('ocrError')
+      : t('ocr');
   }
 
   function h(tag, props, ...kids) {
@@ -485,7 +524,8 @@
     if (filter !== 'all') shown = shown.filter(FILTERS.find(([f]) => f === filter)[2]);
     if (q) {
       shown = shown.filter((i) =>
-        `${i.name}\n${i.handle}\n${i.text}\n${i.context}\n${i.quote ? `${i.quote.name}\n${i.quote.text}` : ''}`
+        `${i.name}\n${i.handle}\n${i.text}\n${i.context}\n${i.quote ? `${i.quote.name}\n${i.quote.text}` : ''}${
+          ocrOn ? i.media.map((src) => `\n${ocr[src] || ''}`).join('') : ''}`
           .toLowerCase()
           .includes(q)
       );
@@ -577,6 +617,20 @@
     list.scrollTop = 0;
     render();
   });
+  ocrBtn.addEventListener('click', () => {
+    if (!alive()) return;
+    // After a failed download the button asks to try again.
+    if (ocrOn && ocrState?.phase === 'error') {
+      ocrState = { phase: 'download', progress: 0 };
+      showOcr();
+      chrome.storage.local.set({ ocrRetry: Date.now() }).catch(() => {});
+      return;
+    }
+    ocrOn = !ocrOn;
+    showOcr();
+    chrome.storage.local.set({ ocrOn }).catch(() => {});
+    if (search.value.trim()) render();
+  });
   list.addEventListener('click', (e) => {
     if (!e.target.closest('.reset')) return;
     search.value = '';
@@ -638,15 +692,25 @@
     if (m?.type === 'toggle') setOpen(!open);
   });
   chrome.storage.onChanged.addListener((changes, area) => {
-    if (area !== 'local' || !changes.items) return;
+    if (area !== 'local') return;
+    if (changes.ocrOn) ocrOn = !!changes.ocrOn.newValue;
+    if (changes.ocrState) ocrState = changes.ocrState.newValue || null;
+    if (changes.ocr) ocr = changes.ocr.newValue || {};
+    if (changes.ocrOn || changes.ocrState) showOcr();
+    if ((changes.ocr || changes.ocrOn) && open && search.value.trim()) scheduleRender();
+    if (!changes.items) return;
     const next = changes.items.newValue || [];
     if (!next.length && items.size) items.clear(); // cleared in another tab
     if (merge(next) || !next.length) open && scheduleRender();
   });
 
-  chrome.storage.local.get(['items', 'filter']).then(({ items: saved, filter: f }) => {
-    merge(saved);
-    setFilter(f || 'all');
+  chrome.storage.local.get(['items', 'filter', 'ocr', 'ocrOn', 'ocrState']).then((s) => {
+    merge(s.items);
+    setFilter(s.filter || 'all');
+    ocr = s.ocr || {};
+    ocrOn = !!s.ocrOn;
+    ocrState = s.ocrState || null;
+    showOcr();
     document.documentElement.append(host);
     lastPath = location.pathname;
     fab.hidden = !isHome();

@@ -7,5 +7,5 @@ version=$(sed -n 's/.*"version": *"\([^"]*\)".*/\1/p' manifest.json)
 out="dist/rewind-for-x-$version.zip"
 mkdir -p dist
 rm -f "$out"
-zip -qrX "$out" manifest.json background.js content.js _locales icons -x '*.DS_Store'
+zip -qrX "$out" manifest.json background.js content.js _locales icons ocr -x '*.DS_Store'
 unzip -l "$out"

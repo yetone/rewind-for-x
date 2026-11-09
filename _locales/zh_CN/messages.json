@@ -17,5 +17,9 @@
   "filterVideos": { "message": "视频" },
   "filterQuotes": { "message": "引用" },
   "filterReposts": { "message": "转帖" },
-  "showAll": { "message": "显示全部" }
+  "showAll": { "message": "显示全部" },
+  "ocr": { "message": "搜索图中文字" },
+  "ocrDownloading": { "message": "正在下载文字识别… $PERCENT$%", "placeholders": { "percent": { "content": "$1" } }},
+  "ocrWorking": { "message": "正在识别图片，还剩 $COUNT$ 张", "placeholders": { "count": { "content": "$1" } }},
+  "ocrError": { "message": "文字识别下载失败，点按重试" }
 }

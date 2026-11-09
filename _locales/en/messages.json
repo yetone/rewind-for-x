@@ -17,5 +17,9 @@
   "filterVideos": { "message": "Videos" },
   "filterQuotes": { "message": "Quotes" },
   "filterReposts": { "message": "Reposts" },
-  "showAll": { "message": "Show all" }
+  "showAll": { "message": "Show all" },
+  "ocr": { "message": "Search text in images" },
+  "ocrDownloading": { "message": "Downloading text recognition… $PERCENT$%", "placeholders": { "percent": { "content": "$1" } }},
+  "ocrWorking": { "message": "Reading images, $COUNT$ left", "placeholders": { "count": { "content": "$1" } }},
+  "ocrError": { "message": "Couldn't download text recognition. Click to try again" }
 }
