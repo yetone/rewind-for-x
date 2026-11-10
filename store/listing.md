@@ -59,19 +59,27 @@ Rewind for X keeps a local list of the posts the user has seen on their X (x.com
 ### Permission justification: storage
 
 ```
-Used to save the list of posts the user has seen on their X home timeline (author, text, image URLs, link and time) in chrome.storage.local on the user's device, so the list survives page reloads and browser restarts. The data never leaves the device.
+Used to save the list of posts the user has seen on their X home timeline (author, text, image URLs, link and time) in chrome.storage.local on the user's device, so the list survives page reloads and browser restarts. With Search text in images turned on, it also keeps the text read from those images and the on/off setting. The data never leaves the device.
+```
+
+### Permission justification: offscreen
+
+```
+Used only when the user turns on Search text in images. An offscreen document (reason WORKERS) runs the bundled Tesseract.js recognizer in a Web Worker to read the text in the images of posts the user has seen, on the device, so the drawer's search can find posts by the words in their images. The document is closed when the feature is off and the worker stops after 30 seconds without work.
 ```
 
 ### Host permission justification: https://x.com/*, https://twitter.com/*
 
 ```
 The content script runs only on x.com (and twitter.com, which redirects to it). It reads the posts shown on the home timeline to record which ones the user has seen, and draws the drawer that lists them. It does not run on any other site and makes no network requests.
+
+The extension requests no other host permissions. With Search text in images turned on, it downloads the images of those posts from pbs.twimg.com to read their text, and the first time downloads the language data for the recognizer (a few MB, from cdn.jsdelivr.net); nothing is uploaded.
 ```
 
 ### Remote code
 
 ```
-No, I am not using remote code. All JavaScript is included in the package.
+No, I am not using remote code. All JavaScript and WebAssembly is included in the package. The only thing downloaded is the recognizer's language data (trained model files), which is data, not code.
 ```
 
 ### Data usage
