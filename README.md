@@ -1,6 +1,6 @@
 # Rewind for X 推文回看
 
-**官网：<https://rewindforx.com>**
+**[从 Chrome 网上应用店安装](https://chromewebstore.google.com/detail/rewind-for-x/ejigodeghgpnkcicikcfmhiedgdecdal?hl=zh-CN)** · 官网：<https://rewindforx.com>
 
 X 的首页推荐一刷新，刚才看到的好帖子就找不回来了。这个 Chrome 扩展会默默记下你在首页**看到过**的每条推文，随时可以回看。
 
@@ -16,6 +16,10 @@ X 的首页推荐一刷新，刚才看到的好帖子就找不回来了。这个
 非 X 官方产品，与 X Corp. 无关。
 
 ## 安装
+
+从 [Chrome 网上应用店](https://chromewebstore.google.com/detail/rewind-for-x/ejigodeghgpnkcicikcfmhiedgdecdal?hl=zh-CN)安装。
+
+或者从源码加载：
 
 1. 打开 `chrome://extensions`，打开右上角「开发者模式」
 2. 「加载已解压的扩展程序」，选择本目录
