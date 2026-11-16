@@ -15,6 +15,8 @@ X 的首页推荐一刷新，刚才看到的好帖子就找不回来了。这个
 
 非 X 官方产品，与 X Corp. 无关。
 
+firefox端暂时未上架，建议下载后手动安装。
+
 ## 安装
 
 从 [Chrome 网上应用店](https://chromewebstore.google.com/detail/rewind-for-x/ejigodeghgpnkcicikcfmhiedgdecdal?hl=zh-CN)安装。
@@ -27,24 +29,46 @@ X 的首页推荐一刷新，刚才看到的好帖子就找不回来了。这个
 
 ## 测试
 
-需要 Playwright 和 Chromium。测试用模拟 X 页面结构的页面，跑真实的扩展。
+需要 Node.js 和 Puppeteer（`puppeteer-core`）。测试用模拟 X 页面结构的页面，在真实 Chrome / Firefox 中加载扩展并检查抽屉 UI。
 
+```bash
+# 安装测试依赖和浏览器（已有浏览器可跳过对应安装）
+npm install --no-save puppeteer-core
+npx @puppeteer/browsers install chrome@stable
+npx @puppeteer/browsers install firefox@stable
+
+# 记录、刷新后保留、忽略广告和非首页、跳过译文、抽屉、搜索、筛选、清空、深色主题
+node test/e2e.mjs --chrome
+node test/e2e.mjs --firefox
+
+# 手机布局：按钮位置、全屏抽屉、触屏尺寸
+node test/mobile.mjs --chrome
+node test/mobile.mjs --firefox
+
+# 搜图中文字：下载进度、识别、搜索、开关（要联网下载识别数据）
+node test/ocr.mjs --chrome
+node test/ocr.mjs --firefox
 ```
-node test/e2e.mjs     # 记录、刷新后保留、忽略广告和非首页、跳过翻译插件的译文、抽屉、搜索、筛选、清空、深色主题
-node test/mobile.mjs  # 手机布局：按钮位置、全屏抽屉、触屏尺寸
-node test/ocr.mjs     # 搜图中文字：下载进度、识别、搜索、开关（要联网下载识别数据）
-```
+
+找不到浏览器时，用 `CHROME_PATH` / `FIREFOX_PATH` 指定可执行文件。Headless Firefox 无法模拟 `pointer:coarse`，所以 mobile 的触屏像素尺寸只在 Chrome 中断言；OCR 的中文识别断言需要中文浏览器界面。
 
 ## 目录
 
 - `background.js`：工具栏图标；在后台逐张识别图片
 - `content.js`：在 x.com 上记录推文，以及抽屉界面
-- `ocr/`：图片文字识别，[Tesseract.js](https://github.com/naptha/tesseract.js) 7（Apache-2.0）跑在 offscreen 页面里。识别数据从 jsDelivr 下载，存在 IndexedDB
+- `ocr/`：图片文字识别，[Tesseract.js](https://github.com/naptha/tesseract.js) 7（Apache-2.0），Chrome 跑在 offscreen 页面、Firefox 跑在后台页。识别数据从 jsDelivr 下载，存在 IndexedDB
 - `tools/icons.py`：生成 `icons/`
 
-## 上架 Chrome 网上应用店
+## 打包与上架
 
-- `tools/pack.sh`：打包成 `dist/rewind-for-x-<版本>.zip`，只含扩展运行需要的文件
+打包（跨平台，只需 Node，Windows / macOS / Linux 通用，无需 shell）：
+
+```
+npx web-ext build --artifacts-dir dist --ignore-files test tools site site-worker store dist README.md LICENSE wrangler.jsonc .gitignore .screenshots .trae-html-share-packages tmp chrome firefox node_modules
+```
+
+产出 `dist/rewind_for_x-<版本>.zip`，只含扩展运行需要的文件，同一份可提交 Chrome 网上应用店和 Firefox Add-ons。
+
 - `node tools/store-assets.mjs`：重新生成 `store/screenshots/`（1280×800，中英文 × 浅色 / 深色 / 搜索）和 `store/promo/`（440×280、1400×560 宣传图），图里的帖子都是虚构的
 - `store/listing.md`：商店描述（中英文），以及隐私表单要填的每一段文字
 - `store/privacy-policy.html`：隐私政策，线上版本在 <https://rewindforx.com/privacy/>
@@ -59,4 +83,4 @@ npx wrangler deploy
 
 ## License
 
-[MIT](LICENSE)
+[MIT](./LICENSE)

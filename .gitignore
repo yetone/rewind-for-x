@@ -2,3 +2,10 @@ test/out/
 .DS_Store
 dist/
 .wrangler/
+
+
+# Chrome firefox kernels
+chrome/
+firefox/
+tmp/
+node_modules/
