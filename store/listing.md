@@ -25,7 +25,7 @@ X's home timeline refreshes often, and a good post you were halfway through can 
 • Follows X's light, dim and dark themes.
 • Ads are skipped. Only the Home timeline is recorded; profiles, threads and search are not.
 
-Private by design: everything stays in your browser's local storage on this device. Nothing is uploaded, synced or shared, there are no accounts and no analytics. The newest 3,000 posts are kept, and one click (confirmed by a second) clears them all.
+Private by design: everything stays in your browser's local storage on this device. Nothing is uploaded, synced or shared; there are no accounts and no analytics. The newest 3,000 posts are kept, and one click (confirmed by a second) clears them all.
 
 Rewind for X is an independent project. It is not made, endorsed or sponsored by X Corp.
 ```
