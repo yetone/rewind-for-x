@@ -12,14 +12,19 @@ chrome.action.onClicked.addListener(async (tab) => {
 // ------------------------------------------------------------ text in images
 //
 // With "ocrOn" set, every image of a recorded post is read once, newest
-// first, by ocr/offscreen.js, and its text kept in "ocr" (src -> text) for
-// the drawer's search. "ocrState" tells the drawer how it is going:
+// first, and its text kept in "ocr" (src -> text) for the drawer's search.
+// "ocrState" tells the drawer how it is going:
 // {phase: 'download', progress} | {phase: 'working', left} | {phase: 'ready'}
 // | {phase: 'error'}. Everything is worked out again from storage, so a
 // service worker that was stopped half way just carries on.
 
 const OCR_DOC = 'ocr/offscreen.html';
 const FLUSH_EVERY = 3; // images read between writes
+
+// Chrome MV3 has chrome.offscreen + chrome.runtime.getContexts; Firefox has
+// neither. In Firefox the manifest's background.scripts load tesseract.min.js
+// and offscreen.js into this same background page, so read() is a global here.
+const USE_OFFSCREEN = typeof chrome.offscreen !== 'undefined' && typeof chrome.runtime.getContexts === 'function';
 
 function ocrLangs() {
   const l = chrome.i18n.getUILanguage().toLowerCase();
@@ -42,10 +47,14 @@ function sourceFor(src) {
   return src;
 }
 
+// --------- Chrome MV3 offscreen document management ---------
+
 async function hasDoc() {
+  if (!USE_OFFSCREEN) return true; // Firefox: OCR lives here, always "present"
   return (await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] })).length > 0;
 }
 async function openDoc() {
+  if (!USE_OFFSCREEN) return;
   if (await hasDoc()) return;
   try {
     await chrome.offscreen.createDocument({
@@ -58,8 +67,23 @@ async function openDoc() {
   }
 }
 async function closeDoc() {
+  if (!USE_OFFSCREEN) return;
   if (await hasDoc()) await chrome.offscreen.closeDocument().catch(() => {});
 }
+
+// --------- OCR read: two paths depending on environment ---------
+
+async function readImage(src, langs) {
+  if (USE_OFFSCREEN) {
+    return await chrome.runtime.sendMessage({ target: 'ocr', src, langs });
+  }
+  // Firefox: offscreen.js runs in this background page, so call read() directly.
+  return await read({ src, langs }, (progress) => {
+    setState({ phase: 'download', progress });
+  });
+}
+
+// --------- pump state machine ---------
 
 let lastState = '';
 function setState(state) {
@@ -113,7 +137,7 @@ async function pumpOnce() {
     // The first image may wait on the download, whose progress the
     // offscreen page reports meanwhile; after that, count down.
     if (i === 0 && !lastState.includes('download')) await setState({ phase: 'working', left: todo.length });
-    const res = await chrome.runtime.sendMessage({ target: 'ocr', src: sourceFor(todo[i]), langs });
+    const res = await readImage(sourceFor(todo[i]), langs);
     if (!res || res.error) {
       failed = true;
       console.warn('[rewind] ocr', res?.error);

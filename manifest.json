@@ -18,7 +18,8 @@
     }
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "scripts": ["ocr/tesseract.min.js", "ocr/offscreen.js", "background.js"]
   },
   "content_scripts": [
     {
@@ -34,6 +35,11 @@
   "commands": {
     "_execute_action": {
       "suggested_key": { "default": "Alt+Shift+R" }
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "rewind-for-x@rewindforx.com"
     }
   }
 }

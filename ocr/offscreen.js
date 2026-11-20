@@ -43,7 +43,7 @@ const cacheKey = (lang) => `./${lang}.traineddata`;
 const cached = async (lang) => (await idb('readonly', (s) => s.getKey(cacheKey(lang)))) !== undefined;
 
 // Download what isn't cached yet, reporting progress across all of it.
-async function download(langs) {
+async function download(langs, onProgress) {
   const missing = [];
   for (const l of langs) if (!(await cached(l))) missing.push(l);
   if (!missing.length) return;
@@ -56,7 +56,7 @@ async function download(langs) {
     const p = Math.floor((sum / missing.length) * 100) / 100;
     if (p === sent) return;
     sent = p;
-    chrome.runtime.sendMessage({ type: 'ocr-progress', progress: p }).catch(() => {});
+    if (onProgress) onProgress(p);
   };
   report();
   await Promise.all(missing.map(async (lang) => {
@@ -80,12 +80,12 @@ async function download(langs) {
 
 // ------------------------------------------------------------------- reading
 
-async function getWorker(langs) {
+async function getWorker(langs, onProgress) {
   const key = langs.join('+');
   if (worker && workerLangs === key) return worker;
   if (worker) await worker.terminate().catch(() => {});
   worker = null;
-  await download(langs);
+  await download(langs, onProgress);
   worker = await Tesseract.createWorker(key, Tesseract.OEM.LSTM_ONLY, {
     workerPath: chrome.runtime.getURL('ocr/worker.min.js'),
     corePath: chrome.runtime.getURL('ocr/tesseract-core-simd-lstm.js'),
@@ -121,8 +121,8 @@ function textOf(data) {
   return lines.join('\n');
 }
 
-async function read({ src, langs }) {
-  const w = await getWorker(langs);
+async function read({ src, langs }, onProgress) {
+  const w = await getWorker(langs, onProgress);
   let image;
   try {
     const res = await fetch(src);
@@ -142,7 +142,7 @@ async function read({ src, langs }) {
 chrome.runtime.onMessage.addListener((m, _sender, reply) => {
   if (m?.target !== 'ocr') return;
   clearTimeout(idleTimer);
-  read(m)
+  read(m, (progress) => chrome.runtime.sendMessage({ type: 'ocr-progress', progress }).catch(() => {}))
     .then(reply, (e) => reply({ error: String(e?.message || e) }))
     .finally(() => {
       idleTimer = setTimeout(() => {
